@@ -20,11 +20,34 @@ class ModulEval extends Module
         return true;
     }
 
-    public function slogan()
-    {
-        $slogan = Db::getInstance()->getRow('SELECT * FROM plantes');
+    // public function slogan()
+    // {
+    //     $slogan = Db::getInstance()->getRow('SELECT * FROM plantes');
 
+    // }
+
+    public function getContent()
+    {
+        $output = null;
+
+        if (Tools::isSubmit('submit'.$this->name)) 
+        {
+            $ev_moduleval = strval(Tools::getValue('slogan'));
+            if (!$ev_module || empty($ev_moduleval) || !Validate::isGenericName($ev_moduleval)) 
+            {
+                $output .= $this->displayError( $this->l('Invalid Configuration value') );
+            } else {
+                Configuration::updateValue('slogan', $ev_moduleval);
+                $output .= $this->displayConfirmation($this->l('Settings updated'));
+            }
+        }
+        return $output.$this->displayForm()
     }
+
+    // public function displayForm()
+    // {
+
+    // }
 
     public function hookdisplayHeader($params)
     {
